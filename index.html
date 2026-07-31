@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SaiTech Smart Ledger</title>
+  <style>
+    :root{
+      --primary:#2563eb;--primary2:#1d4ed8;--dark:#0f172a;--bg:#eef6ff;--card:#fff;
+      --text:#111827;--muted:#64748b;--border:#dbeafe;--success:#16a34a;--danger:#dc2626;--warn:#f59e0b;
+      --shadow:0 12px 28px rgba(15,23,42,.12);--radius:18px;
+    }
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#eef6ff,#fff);color:var(--text)}
+    .app{max-width:1250px;margin:auto;padding:14px}.topbar{background:linear-gradient(135deg,var(--dark),var(--primary));color:white;padding:16px;border-radius:22px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    h1,h2,h3{margin:0}.brand h1{font-size:26px}.brand p{margin:6px 0 0;color:#dbeafe;font-size:13px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.btn,button{border:0;border-radius:12px;padding:11px 14px;background:var(--primary);color:white;font-weight:800;cursor:pointer}.btn:hover,button:hover{background:var(--primary2)}.btn-soft{background:#e0edff;color:#1d4ed8;border:1px solid #bfdbfe}.btn-danger{background:var(--danger)}.btn-success{background:var(--success)}.btn-warn{background:var(--warn);color:#111827}.hidden{display:none!important}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 22px rgba(15,23,42,.08);padding:16px;margin-top:16px}.card-title{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:14px}
+    input,select,textarea{width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:#fbfdff;font-size:14px}textarea{min-height:70px;resize:vertical}label{display:block;font-size:13px;font-weight:800;color:#334155;margin-bottom:6px}.grid{display:grid;gap:12px}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.grid-4{grid-template-columns:repeat(4,1fr)}
+    .login-wrap{display:grid;grid-template-columns:1.4fr .8fr;gap:16px;margin-top:16px}.login-hero{background:white;border-radius:22px;box-shadow:var(--shadow);padding:22px;border:1px solid var(--border)}.login-hero h2{font-size:26px;color:var(--dark)}.hint{color:var(--muted);font-size:13px;margin-top:6px;line-height:1.5}.tabs{display:flex;gap:8px;overflow:auto;margin-top:16px;background:white;padding:8px;border-radius:16px;box-shadow:0 6px 18px rgba(15,23,42,.08)}.tab{white-space:nowrap;background:#f1f5f9;color:#0f172a;border:1px solid var(--border)}.tab.active{background:var(--primary);color:white}.section{display:none}.section.active{display:block}
+    .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat{background:white;border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:0 8px 22px rgba(15,23,42,.08);cursor:pointer;position:relative;overflow:hidden}.stat:after{content:"";position:absolute;right:-30px;top:-30px;width:100px;height:100px;background:rgba(37,99,235,.11);border-radius:50%}.stat small{font-weight:800;color:var(--muted)}.stat h2{font-size:28px;margin-top:8px}.green h2{color:var(--success)}.red h2{color:var(--danger)}.blue h2{color:var(--primary)}
+    .customer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}.customer-card{background:white;border:1px solid var(--border);border-radius:20px;padding:14px;box-shadow:0 8px 22px rgba(15,23,42,.08);cursor:pointer}.customer-head{display:flex;gap:12px;align-items:center}.avatar{width:58px;height:58px;border-radius:50%;object-fit:cover;background:#dbeafe;border:2px solid #bfdbfe}.customer-name{font-size:18px;font-weight:900}.muted{color:var(--muted);font-size:13px}.mini-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}.mini{background:#f8fbff;border:1px solid var(--border);border-radius:12px;padding:9px;text-align:center}.mini b{display:block;font-size:14px}.mini span{font-size:11px;color:var(--muted);font-weight:800}
+    .table-wrap{width:100%;overflow:auto;border:1px solid var(--border);border-radius:14px;background:white}table{border-collapse:collapse;width:100%;min-width:900px}th,td{padding:10px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:13px}th{background:#0f172a;color:white;white-space:nowrap}tr:hover td{background:#f8fbff}.badge{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:900}.badge-green{background:#dcfce7;color:#166534}.badge-red{background:#fee2e2;color:#991b1b}.badge-blue{background:#dbeafe;color:#1e40af}.actions{display:flex;gap:6px;flex-wrap:wrap}.actions button{padding:8px 10px;font-size:12px}.chart{width:100%;height:300px;border:1px solid var(--border);border-radius:14px;background:white}.empty{text-align:center;color:var(--muted);font-weight:800;padding:18px}.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#0f172a;color:white;padding:12px 16px;border-radius:999px;box-shadow:var(--shadow);z-index:9}.profile-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;background:#e0edff;border:2px solid #bfdbfe}.customer-profile{display:flex;align-items:center;gap:12px;margin-bottom:14px;background:#f8fbff;border:1px solid var(--border);border-radius:16px;padding:12px}.customer-profile img{width:76px;height:76px;border-radius:50%;object-fit:cover;background:#dbeafe;border:2px solid #bfdbfe}.customer-profile b{font-size:18px}.print-only{display:none}
+
+    .notice-box{border:1px solid #bfdbfe;border-left:6px solid var(--primary);border-radius:16px;background:linear-gradient(135deg,#ffffff,#eff6ff);padding:12px;margin:10px 0;box-shadow:0 8px 20px rgba(37,99,235,.10)}.notice-box b{display:block;font-size:15px;color:#0f172a}.notice-box small{display:block;color:#64748b;font-weight:800;margin:4px 0}.notice-box p{margin:6px 0 0;line-height:1.45}.notice-unread{border-left-color:#f59e0b;background:linear-gradient(135deg,#fff7ed,#ffffff)}.wa-btn{background:#22c55e;color:#052e16}.wa-btn:hover{background:#16a34a}
+    .message-panel{border:2px solid #bfdbfe;border-radius:22px;background:linear-gradient(135deg,#ffffff 0%,#eff6ff 55%,#fff7ed 100%);padding:16px;box-shadow:0 12px 28px rgba(37,99,235,.14);position:relative;overflow:hidden}.message-panel:before{content:"🔔";position:absolute;right:18px;top:8px;font-size:48px;opacity:.13}.template-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.template-buttons button{background:#f1f5f9;color:#0f172a;border:1px solid #cbd5e1}.message-preview{white-space:pre-wrap;background:#0f172a;color:#f8fafc;border-radius:18px;padding:14px;line-height:1.55;min-height:160px;border:3px double #93c5fd}.message-preview .gold{color:#fde68a}.decor-title{font-size:22px;font-weight:1000;color:#0f172a}.decor-sub{font-size:12px;color:#475569;font-weight:800}
+    @media(max-width:850px){.login-wrap{grid-template-columns:1fr}.stat-grid,.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}.topbar{align-items:flex-start}.brand h1{font-size:21px}.row{width:100%}.row button{flex:1}.customer-grid{grid-template-columns:1fr}.mini-grid{grid-template-columns:1fr 1fr}.app{padding:9px}.card{padding:12px}.stat h2{font-size:24px}input,select,textarea,button{font-size:15px;min-height:46px}.tabs button{min-width:145px}}
+    @media print{.no-print,.topbar,.tabs,button{display:none!important}.card{box-shadow:none;border:1px solid #aaa}.app{max-width:none}.print-only{display:block}}
+  
+
+/* ===== FINAL RESPONSIVE EDITION: Mobile + Tablet + Laptop + Desktop ===== */
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{min-width:0;overflow-x:hidden}
+img,canvas,video{max-width:100%;height:auto}
+button,input,select,textarea{touch-action:manipulation}
+button:active{transform:scale(.98)}
+.app{width:100%;max-width:1440px}
+.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px)}
+.brand{min-width:0;flex:1 1 260px}.brand h1{line-height:1.15}.brand p{line-height:1.4}
+.row,.actions,.template-buttons{min-width:0}.row button,.actions button,.template-buttons button{white-space:normal}
+.tabs{position:sticky;top:86px;z-index:40;scrollbar-width:thin;-webkit-overflow-scrolling:touch}.tabs .tab{flex:0 0 auto;min-height:44px}
+.section{min-width:0}.card{min-width:0}.card-title>*{min-width:0}.card-title h2,.decor-title{line-height:1.2}
+.stat-grid{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}.stat{min-width:0}.stat h2{word-break:break-word}
+.customer-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}.customer-card{min-width:0}.customer-head{min-width:0}.customer-name{word-break:break-word}.muted{word-break:break-word}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}.grid-3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}.grid-4{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-wrap:before{content:'↔ Scroll table';display:none;padding:7px 10px;font-size:12px;font-weight:900;color:#475569;background:#f8fbff;border-bottom:1px solid var(--border)}
+table{min-width:820px}th,td{white-space:normal}.message-preview{max-height:360px;overflow:auto}.chart{max-width:100%}
+.quick-amounts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.quick-amounts button{padding:8px 10px;font-size:12px;background:#f1f5f9;color:#0f172a;border:1px solid #cbd5e1}
+
+@media (min-width:1441px){.app{max-width:1560px}.brand h1{font-size:30px}.stat h2{font-size:30px}.card{padding:18px}}
+@media (max-width:1100px){.login-wrap{grid-template-columns:1fr}.topbar{align-items:flex-start}.tabs{top:105px}.customer-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}.mini-grid{grid-template-columns:repeat(2,1fr)}table{min-width:760px}.message-panel{padding:14px}}
+@media (max-width:768px){
+  .app{padding:10px}.topbar{border-radius:18px;padding:14px}.brand h1{font-size:22px}.brand p{font-size:12.5px}
+  .row{width:100%;display:grid;grid-template-columns:1fr 1fr}.row button{width:100%}
+  .tabs{top:116px;border-radius:14px;margin-top:10px;padding:7px;gap:7px}.tabs .tab{min-width:140px;padding:10px 12px;font-size:13px}
+  .card{padding:13px;border-radius:16px;margin-top:12px}.card-title{align-items:flex-start}.card-title h2{font-size:18px}.decor-title{font-size:19px}
+  .stat-grid{grid-template-columns:1fr 1fr;gap:10px}.stat{padding:13px;border-radius:16px}.stat small{font-size:12px}.stat h2{font-size:22px}
+  .customer-grid{grid-template-columns:1fr}.customer-card{padding:12px}.avatar{width:52px;height:52px}.customer-name{font-size:16px}
+  .mini-grid{grid-template-columns:1fr 1fr}.mini{padding:8px}.mini b{font-size:13px}.mini span{font-size:10.5px}
+  .grid,.grid-2,.grid-3,.grid-4{grid-template-columns:1fr!important;gap:10px}
+  input,select,textarea,button{font-size:15px;min-height:46px}.actions{display:grid;grid-template-columns:1fr 1fr;width:100%}.actions button{width:100%}
+  .table-wrap:before{display:block}table{min-width:700px}th,td{padding:9px 8px;font-size:12.5px}.message-preview{font-size:13px;min-height:140px}.chart{height:260px}
+}
+@media (max-width:480px){
+  .app{padding:8px}.topbar{padding:12px;border-radius:16px}.brand h1{font-size:19px}.brand p{font-size:11.5px}.row{grid-template-columns:1fr}
+  .tabs{top:108px}.tabs .tab{min-width:128px;font-size:12.5px;padding:9px 10px}
+  .login-hero{padding:14px;border-radius:16px}.login-hero h2{font-size:21px}.card{padding:11px;border-radius:15px}.card-title{gap:8px}.card-title h2{font-size:16px}
+  .stat-grid{grid-template-columns:1fr}.stat h2{font-size:24px}.customer-profile{align-items:flex-start}.customer-profile img{width:60px;height:60px}
+  .customer-head{align-items:flex-start}.mini-grid{grid-template-columns:1fr}.actions,.template-buttons{grid-template-columns:1fr;display:grid}.actions button,.template-buttons button{width:100%}
+  input,select,textarea,button{min-height:44px;border-radius:11px}.btn,button{padding:10px 12px}
+  table{min-width:650px}th,td{font-size:12px;padding:8px 7px}.message-panel{padding:11px;border-radius:16px}.message-panel:before{font-size:34px}.decor-title{font-size:17px}.message-preview{font-size:12.5px;border-radius:14px}.toast{width:calc(100% - 24px);border-radius:16px;text-align:center}
+}
+@media (max-width:360px){.brand h1{font-size:17px}.tabs .tab{min-width:118px}.stat h2{font-size:21px}table{min-width:610px}}
+@media print{.topbar{position:static}.tabs{position:static}.table-wrap:before{display:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar no-print">
+    <div class="brand"><h1>💰 SaiTech Smart Ledger</h1><p>🔴 Debit (डेबिट) • 🟢 Credit (क्रेडिट) • Daily Wages • Balance • Customer Notification</p></div>
+    <div class="row"><button class="btn-soft" id="adminHeaderBtn" onclick="showAdminLogin()">Admin Login</button><button class="btn-danger hidden" id="logoutBtn" onclick="logout()">Logout</button></div>
+  </header>
+
+  <div id="loginPage" class="login-wrap">
+    <div class="login-hero">
+      <h2>Customer Login</h2><p class="hint">Customer apne mobile number se login karega. Login ke baad sirf apna data dekhega. Demo me data browser ke localStorage me save hota hai.</p>
+      <div class="card" style="box-shadow:none">
+        <label>Mobile Number</label><input id="customerMobileLogin" maxlength="10" placeholder="10 digit mobile number" onkeydown="if(event.key==='Enter') customerLogin()">
+        <br><br><button class="btn-success" onclick="customerLogin()">Customer Login</button>
+        <p class="hint"><b>Demo Customer:</b> 7417609443</p>
+      </div>
+    </div>
+    <div class="login-hero hidden" id="adminLoginBox">
+      <h2>Admin Login</h2><p class="hint">Default: Admin / 12345</p>
+      <label>Username</label><input id="adminUser" placeholder="Admin">
+      <br><br><label>Password</label><input id="adminPass" type="password" placeholder="12345" onkeydown="if(event.key==='Enter') adminLogin()">
+      <br><br><button class="btn-success" onclick="adminLogin()">Login</button> <button class="btn-soft" onclick="hideAdminLogin()">Cancel</button>
+    </div>
+  </div>
+
+  <div id="mainApp" class="hidden">
+    <nav class="tabs no-print" id="adminTabs">
+      <button class="tab active" onclick="openTab('adminDashboard',this)">Admin Dashboard</button>
+      <button class="tab" onclick="openTab('addCustomer',this)">Add Customer</button>
+      <button class="tab" onclick="openTab('addTransaction',this)">Add Transaction</button>
+      <button class="tab" onclick="openTab('monthlyReport',this);drawMonthlyChart()">Monthly Graph</button>
+      <button class="tab" onclick="openTab('fastPaying',this)">Fast Paying</button>
+      <button class="tab" onclick="openTab('messageCenter',this);initMessageCenter()">Message Box</button>
+      <button class="tab" onclick="openTab('settings',this)">Settings</button>
+    </nav>
+
+    <section id="customerDashboard" class="section">
+      <div class="card"><div class="card-title"><h2 id="customerWelcome">Customer Dashboard</h2><button onclick="printCustomerLedger()" class="btn-soft">Print</button></div>
+        <div id="customerProfileBox" class="customer-profile"></div>
+        <div class="stat-grid">
+          <div class="stat red" onclick="showCustomerTransactions('diya')"><small>🔴 Debit (डेबिट)<br>ग्राहक को पैसे दिए</small><h2 id="custDiya">₹0</h2></div>
+          <div class="stat green" onclick="showCustomerTransactions('liya')"><small>🟢 Credit (क्रेडिट)<br>ग्राहक से पैसे लिए</small><h2 id="custLiya">₹0</h2></div>
+          <div class="stat blue" onclick="showCustomerTransactions('all')"><small>💰 Balance (बाकी बकाया)<br>Outstanding Balance</small><h2 id="custBalance">₹0</h2><p class="hint" id="custSummaryLine"></p></div>
+        </div>
+      </div>
+      <div class="card"><div class="card-title"><h2 id="customerTxTitle">Transaction Details</h2></div><div id="customerTxList" class="table-wrap"></div></div>
+      <div class="card"><div class="card-title"><h2>🔔 Notifications / सूचना</h2><button class="btn-soft" onclick="markCustomerNotificationsRead()">Mark Read</button></div><div id="customerNotifications"></div></div>
+    </section>
+
+    <section id="adminDashboard" class="section active admin-only">
+      <div class="card">
+        <div class="card-title"><h2>Admin Total Summary</h2><span class="badge badge-blue">Sabhi customers ka total</span></div>
+        <div class="stat-grid">
+          <div class="stat red"><small>🔴 Total Debit (डेबिट)<br>ग्राहक को पैसे दिए</small><h2 id="adminTotalDiya">₹0</h2></div>
+          <div class="stat green"><small>🟢 Total Credit (क्रेडिट)<br>ग्राहक से पैसे लिए</small><h2 id="adminTotalLiya">₹0</h2></div>
+          <div class="stat blue"><small>💰 Balance (बाकी बकाया)<br>Outstanding Balance</small><h2 id="adminTotalBalance">₹0</h2></div>
+        </div>
+      </div>
+      <div class="card"><div class="card-title"><h2>All Customers</h2><div class="actions"><button class="btn-soft" onclick="openTabById('addCustomer')">+ Add Customer</button><button class="btn-soft" onclick="exportJSON()">Export JSON</button><button class="btn-warn" onclick="document.getElementById('importJSON').click()">Import JSON</button><input id="importJSON" type="file" accept=".json" class="hidden" onchange="importJSON(event)"></div></div>
+        <input id="customerSearch" placeholder="Search name, mobile, address..." oninput="renderAdmin()"><br><br><div id="customerCards" class="customer-grid"></div>
+      </div>
+      <div class="card"><div class="card-title"><h2 id="adminDetailTitle">Customer Transaction History</h2><button onclick="printSelectedAdminCustomer()" class="btn-soft">Print Selected Customer</button></div><div id="adminDetailList" class="table-wrap"><div class="empty">Customer card par click karein.</div></div></div>
+    </section>
+
+    <section id="addCustomer" class="section admin-only">
+      <div class="card"><div class="card-title"><h2 id="customerFormTitle">Add New Customer</h2><button class="btn-soft" onclick="resetCustomerForm()">Clear</button></div>
+        <input id="editCustomerId" type="hidden"><div class="grid grid-2"><div><label>Name</label><input id="cName" placeholder="Customer name"></div><div><label>Mobile Number</label><input id="cMobile" maxlength="10" placeholder="10 digit mobile"></div><div><label>Address</label><input id="cAddress" placeholder="Address"></div><div><label>Opening Balance</label><input id="cOpening" type="number" placeholder="0"></div><div><label>Profile Picture</label><input id="cPhoto" type="file" accept="image/*" onchange="previewCustomerPhoto(event)"></div><div><img id="cPhotoPreview" class="profile-preview" alt="preview"></div></div><br><button class="btn-success" onclick="saveCustomer()">Save Customer</button>
+      </div>
+    </section>
+
+    <section id="addTransaction" class="section admin-only">
+      <div class="card"><div class="card-title"><h2>Add Transaction</h2><button class="btn-soft" onclick="resetTxForm()">Clear</button></div>
+        <div class="grid grid-3">
+          <div><label>Customer</label><select id="txCustomer"></select></div>
+          <div><label>Type</label><select id="txType" onchange="updateTxTypeUI()"><option value="diya">🔴 Debit (डेबिट) - ग्राहक को पैसे दिए / उधार</option><option value="liya">🟢 Credit (क्रेडिट) - ग्राहक से पैसे लिए / </option></select><div class="quick-amounts"><button type="button" onclick="set('txType','diya');updateTxTypeUI()">Debit</button><button type="button" onclick="set('txType','liya');updateTxTypeUI()">Credit</button></div></div>
+          <div><label>Entry Base</label><select id="txBase" onchange="toggleDailyWages()"><option value="normal">Normal Amount</option><option value="daily_wages">Daily Wages / दैनिक मजदूरी</option></select></div>
+          <div id="normalAmountBox"><label>Amount</label><input id="txAmount" type="number" placeholder="0"><div class="quick-amounts"><button type="button" onclick="addQuickAmount(100)">+100</button><button type="button" onclick="addQuickAmount(200)">+200</button><button type="button" onclick="addQuickAmount(500)">+500</button><button type="button" onclick="addQuickAmount(1000)">+1000</button><button type="button" onclick="clearAmount()">Clear</button></div></div>
+          <div id="wageDaysBox" class="hidden"><label>Daily Wages Days / दिन</label><input id="txDays" type="number" placeholder="0" oninput="calcDailyWages()"></div>
+          <div id="wageRateBox" class="hidden"><label>Wage Rate Per Day / रोज मजदूरी</label><input id="txRate" type="number" placeholder="0" oninput="calcDailyWages()"><div class="quick-amounts"><button type="button" onclick="setWageRate(300)">₹300</button><button type="button" onclick="setWageRate(400)">₹400</button><button type="button" onclick="setWageRate(500)">₹500</button><button type="button" onclick="setWageRate(600)">₹600</button></div></div>
+          <div><label>Date</label><input id="txDate" type="date"></div><div><label>Time</label><input id="txTime" type="time"></div><div><label>Charge</label><input id="txCharge" type="number" placeholder="0"></div><div><label>Purpose</label><input id="txPurpose" placeholder="Purpose / Work name"></div><div class="grid" style="grid-column:1/-1"><label>Notes</label><textarea id="txNotes" placeholder="Notes if available"></textarea></div>
+        </div><br><button class="btn-success" onclick="saveTransaction()">Save Transaction + Customer Notification</button> <button class="wa-btn" onclick="sendWhatsAppNotificationFromForm()">WhatsApp Notify</button>
+      </div>
+    </section>
+
+    <section id="monthlyReport" class="section admin-only">
+      <div class="card"><div class="card-title"><h2>Monthly Graph / Report</h2><input id="reportMonth" type="month" onchange="renderMonthlyReport();drawMonthlyChart()"></div><canvas id="monthlyCanvas" class="chart"></canvas><br><br><div id="monthlyTable" class="table-wrap"></div></div>
+    </section>
+
+    <section id="fastPaying" class="section admin-only">
+      <div class="card"><div class="card-title"><h2>Fastest Paying Customer Report</h2><span class="badge badge-blue">Average delay ke hisaab se rank</span></div><div id="fastPayingTable" class="table-wrap"></div></div>
+    </section>
+
+
+    <section id="messageCenter" class="section admin-only">
+      <div class="card">
+        <div class="card-title"><div><div class="decor-title">🔔 Decorative Customer Message Box</div><div class="decor-sub">Admin customer ko direct notification + WhatsApp message bhej sakta hai</div></div><span class="badge badge-blue">Hindi + English Format</span></div>
+        <div class="message-panel">
+          <div class="grid grid-2">
+            <div>
+              <label>Select Customer</label>
+              <select id="msgCustomer" onchange="buildMessagePreview()"></select>
+            </div>
+            <div>
+              <label>Message Type</label>
+              <select id="msgType" onchange="applyMessageTemplate()">
+                <option value="balance">Balance Reminder / बाकी बकाया</option>
+                <option value="debit">Debit Alert / डेबिट सूचना</option>
+                <option value="credit">Credit Alert / क्रेडिट सूचना</option>
+                <option value="custom">Custom Message / अपना संदेश</option>
+              </select>
+            </div>
+            <div>
+              <label>Amount (optional)</label>
+              <input id="msgAmount" type="number" placeholder="₹ Amount" oninput="buildMessagePreview()">
+            </div>
+            <div>
+              <label>Purpose / Work</label>
+              <input id="msgPurpose" placeholder="Purpose / काम का नाम" oninput="buildMessagePreview()">
+            </div>
+            <div style="grid-column:1/-1">
+              <label>Message Text</label>
+              <textarea id="msgBody" placeholder="Yahan message likhein..." oninput="buildMessagePreview()"></textarea>
+              <div class="template-buttons">
+                <button type="button" onclick="setMessageTemplate('balance')">Balance Reminder</button>
+                <button type="button" onclick="setMessageTemplate('debit')">Debit</button>
+                <button type="button" onclick="setMessageTemplate('credit')">Credit</button>
+                <button type="button" onclick="clearMessageBox()">Clear</button>
+              </div>
+            </div>
+          </div>
+          <br>
+          <label>Preview / भेजने से पहले देखें</label>
+          <div id="msgPreview" class="message-preview"></div>
+          <br>
+          <div class="actions">
+            <button class="btn-success" onclick="sendDirectCustomerNotification()">Save Notification to Customer Login</button>
+            <button class="wa-btn" onclick="sendMessageWhatsApp()">Send WhatsApp</button>
+            <button class="btn-warn" onclick="sendBothNotificationAndWhatsApp()">Save + WhatsApp Both</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings" class="section admin-only">
+      <div class="card"><div class="card-title"><h2>Admin Account Settings</h2></div>
+        <div class="grid grid-2"><div><label>Current Username</label><input id="setCurrentUser" readonly></div><div><label>New Username</label><input id="setNewUser" placeholder="New username"></div><div><label>Old Password</label><input id="setOldPass" type="password"></div><div><label>New Password</label><input id="setNewPass" type="password"></div><div><label>Confirm Password</label><input id="setConfirmPass" type="password"></div></div><br><button class="btn-success" onclick="changeAdminSettings()">Update Admin</button>
+      </div>
+    </section>
+  </div>
+</div>
+<div id="toast" class="toast hidden"></div>
+<script>
+const KEY='saitech_ledger_offline_v2';let currentRole=null,currentCustomerId=null,selectedAdminCustomerId=null,photoData='';
+function defaultData(){return{admin:{username:'Admin',password:'12345'},notifications:[],customers:[{id:id(),name:'Deepak Kumar',mobile:'7417609443',address:'Gandhi Nagar, Muzaffarnagar',openingBalance:0,photo:''},{id:id(),name:'Anurag',mobile:'9876543210',address:'Muzaffarnagar',openingBalance:0,photo:''}],transactions:[]}}
+function load(){let d=localStorage.getItem(KEY);if(!d){let x=defaultData();x.transactions=[{id:id(),customerId:x.customers[0].id,type:'diya',amount:5000,date:today(-10),time:'10:30',purpose:'Form payment',charge:50,notes:'Opening demo entry'},{id:id(),customerId:x.customers[0].id,type:'liya',amount:2000,date:today(-5),time:'14:20',purpose:'Payment received',charge:0,notes:'UPI paid'},{id:id(),customerId:x.customers[1].id,type:'diya',amount:3000,date:today(-8),time:'12:00',purpose:'Cash given',charge:30,notes:''},{id:id(),customerId:x.customers[1].id,type:'liya',amount:3000,date:today(-1),time:'18:00',purpose:'Full payment',charge:0,notes:''}];save(x);return x}let parsed=JSON.parse(d); if(!parsed.notifications) parsed.notifications=[]; return parsed}
+function save(d){localStorage.setItem(KEY,JSON.stringify(d))}function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}function rs(n){return '₹'+Number(n||0).toLocaleString('en-IN')}function toast(m){let t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),2200)}function today(offset=0){let d=new Date();d.setDate(d.getDate()+offset);return d.toISOString().slice(0,10)}function nowTime(){return new Date().toTimeString().slice(0,5)}
+function showAdminLogin(){document.getElementById('adminLoginBox').classList.remove('hidden')}function hideAdminLogin(){document.getElementById('adminLoginBox').classList.add('hidden')}
+function customerLogin(){let mobile=document.getElementById('customerMobileLogin').value.trim();if(!/^\d{10}$/.test(mobile))return toast('10 digit mobile number daliye');let d=load();let c=d.customers.find(x=>x.mobile===mobile);if(!c)return toast('Customer nahi mila. Admin se add karayein.');currentRole='customer';currentCustomerId=c.id;localStorage.setItem('saitech_session',JSON.stringify({role:'customer',customerId:c.id}));showMain();renderCustomer()}
+function adminLogin(){let d=load(),u=document.getElementById('adminUser').value.trim(),p=document.getElementById('adminPass').value;if(u===d.admin.username&&p===d.admin.password){currentRole='admin';localStorage.setItem('saitech_session',JSON.stringify({role:'admin'}));showMain();renderAdmin();toast('Admin login success')}else toast('Wrong username/password')}
+function logout(){localStorage.removeItem('saitech_session');currentRole=null;currentCustomerId=null;location.reload()}
+function checkSession(){let s=localStorage.getItem('saitech_session');if(!s)return;try{s=JSON.parse(s);currentRole=s.role;currentCustomerId=s.customerId||null;showMain();currentRole==='admin'?renderAdmin():renderCustomer()}catch(e){}}
+function showMain(){document.getElementById('loginPage').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');document.getElementById('logoutBtn').classList.remove('hidden');document.getElementById('adminHeaderBtn').classList.add('hidden');document.getElementById('adminTabs').classList.toggle('hidden',currentRole!=='admin');document.querySelectorAll('.admin-only').forEach(e=>e.classList.toggle('hidden',currentRole!=='admin'));document.getElementById('customerDashboard').classList.toggle('active',currentRole==='customer');document.getElementById('adminDashboard').classList.toggle('active',currentRole==='admin');initDates();populateCustomerSelect()}
+function openTab(id,btn){document.querySelectorAll('.section.admin-only').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='fastPaying')renderFastPaying();if(id==='monthlyReport')renderMonthlyReport();if(id==='settings')loadSettings();if(id==='messageCenter')initMessageCenter()}
+function openTabById(id){let btn=[...document.querySelectorAll('.tab')].find(b=>b.getAttribute('onclick')?.includes(id));openTab(id,btn)}
+function txTotal(t){return Number(t.amount||0)+Number(t.charge||0)}
+function splitBalance(raw){
+  raw=Number(raw||0);
+  return {raw, balance: raw>0?raw:0};
+}
+function totals(customerId){
+  let d=load(),tx=d.transactions.filter(t=>t.customerId===customerId);
+  let diya=tx.filter(t=>t.type==='diya').reduce((s,t)=>s+txTotal(t),0);
+  let liya=tx.filter(t=>t.type==='liya').reduce((s,t)=>s+txTotal(t),0);
+  let c=d.customers.find(x=>x.id===customerId);
+  let opening=Number(c?.openingBalance||0);
+  let raw=opening+diya-liya;
+  return{diya,liya,net:raw,...splitBalance(raw),count:tx.length};
+}
+function renderCustomer(){
+  let d=load(),c=d.customers.find(x=>x.id===currentCustomerId);if(!c)return logout();
+  let t=totals(c.id);
+  document.getElementById('customerWelcome').textContent='Welcome, '+c.name;
+  document.getElementById('customerProfileBox').innerHTML=`<img src="${c.photo||''}" onerror="this.style.display='none'"><div><b>${esc(c.name)}</b><div class="muted">📱 ${esc(c.mobile)}</div><div class="muted">📍 ${esc(c.address||'')}</div></div>`;
+  document.getElementById('custDiya').textContent=rs(t.diya);
+  document.getElementById('custLiya').textContent=rs(t.liya);
+  document.getElementById('custBalance').textContent=rs(t.balance);
+  document.getElementById('custSummaryLine').textContent='Balance '+rs(t.balance);
+  showCustomerTransactions('all'); renderCustomerNotifications()
+}
+function showCustomerTransactions(type){let d=load(),tx=d.transactions.filter(t=>t.customerId===currentCustomerId&&(type==='all'||t.type===type)).sort(sortDate);document.getElementById('customerTxTitle').textContent=type==='diya'?'🔴 Debit (डेबिट)':type==='liya'?'🟢 Credit (क्रेडिट)':'All Transactions';document.getElementById('customerTxList').innerHTML=txTable(tx,false,0,'customer')}
+function renderAdmin(){
+  populateCustomerSelect();populateMessageCustomerSelect();
+  let d=load(),q=(document.getElementById('customerSearch')?.value||'').toLowerCase();
+  let all=d.customers.map(c=>totals(c.id));
+  let totalDiya=all.reduce((s,t)=>s+t.diya,0),totalLiya=all.reduce((s,t)=>s+t.liya,0),totalBalance=all.reduce((s,t)=>s+t.balance,0);
+  document.getElementById('adminTotalDiya').textContent=rs(totalDiya);
+  document.getElementById('adminTotalLiya').textContent=rs(totalLiya);
+  document.getElementById('adminTotalBalance').textContent=rs(totalBalance);
+  let arr=d.customers.filter(c=>(c.name+c.mobile+c.address).toLowerCase().includes(q));
+  document.getElementById('customerCards').innerHTML=arr.length?arr.map(c=>{let t=totals(c.id);return `<div class="customer-card" onclick="showAdminCustomer('${c.id}')"><div class="customer-head"><img class="avatar" src="${c.photo||''}" onerror="this.src='';this.style.background='#dbeafe'"><div><div class="customer-name">${esc(c.name)}</div><div class="muted">📱 ${esc(c.mobile)}</div><div class="muted">📍 ${esc(c.address||'')}</div></div></div><div class="mini-grid"><div class="mini"><b>${rs(t.diya)}</b><span>🔴 Debit (डेबिट)<br>ग्राहक को पैसे दिए</span></div><div class="mini"><b>${rs(t.liya)}</b><span>🟢 Credit (क्रेडिट)<br>ग्राहक से पैसे लिए</span></div><div class="mini"><b>${rs(t.balance)}</b><span>💰 Balance<br>बाकी बकाया</span></div></div><div class="actions" style="margin-top:10px"><button onclick="event.stopPropagation();quickAddForCustomer('${c.id}','diya')" class="btn-soft">+ Debit</button><button onclick="event.stopPropagation();quickAddForCustomer('${c.id}','liya')" class="btn-soft">+ Credit</button><button onclick="event.stopPropagation();editCustomer('${c.id}')" class="btn-soft">Edit</button><button onclick="event.stopPropagation();deleteCustomer('${c.id}')" class="btn-danger">Delete</button></div></div>`}).join(''):'<div class="empty">No customer found</div>';
+  if(selectedAdminCustomerId&&d.customers.some(c=>c.id===selectedAdminCustomerId))showAdminCustomer(selectedAdminCustomerId,false)
+}
+function showAdminCustomer(cid,scroll=true){selectedAdminCustomerId=cid;let d=load(),c=d.customers.find(x=>x.id===cid);let tx=d.transactions.filter(t=>t.customerId===cid).sort(sortDate);document.getElementById('adminDetailTitle').textContent=c.name+' - Complete Transaction History';document.getElementById('adminDetailList').innerHTML=txTable(tx,true,c.openingBalance,'admin');if(scroll)document.getElementById('adminDetailList').scrollIntoView({behavior:'smooth'})}
+function txTable(tx,running=false,opening=0,view='admin'){
+  if(!tx.length)return '<div class="empty">No transactions</div>';
+  let raw=Number(opening||0);
+  let diyaLabel=view==='customer'?'🔴 Debit (डेबिट)':'🔴 Debit (डेबिट)';
+  let liyaLabel=view==='customer'?'🟢 Credit (क्रेडिट)':'🟢 Credit (क्रेडिट)';
+  let rows=tx.map((t,i)=>{
+    let total=txTotal(t), diya=t.type==='diya'?total:0, liya=t.type==='liya'?total:0;
+    raw+=diya-liya;
+    let sp=splitBalance(raw);
+    let status=sp.balance>0?'Balance बाकी':'Zero Clear';
+    return `<tr><td>${i+1}</td><td>${t.date}</td><td>${t.time||''}</td><td>${t.type==='diya'?`<span class="badge badge-red">${diyaLabel}</span>`:`<span class="badge badge-green">${liyaLabel}</span>`}</td><td>${rs(t.amount||0)}</td><td>${rs(t.charge||0)}</td><td>${diya?rs(diya):'-'}</td><td>${liya?rs(liya):'-'}</td><td>${esc(t.purpose||'')}</td><td>${esc((t.base==='daily_wages'?`Daily Wages: ${t.days||0} day × ₹${t.rate||0}. `:'')+(t.notes||''))}</td>${running?`<td><b>${rs(sp.balance)}</b></td><td>${status}</td><td><button class="btn-danger" onclick="deleteTx('${t.id}')">Delete</button></td>`:''}</tr>`
+  }).join('');
+  return `<table><thead><tr><th>S.No</th><th>Date</th><th>Time</th><th>Type</th><th>Amount</th><th>Charge</th><th>${diyaLabel} Total</th><th>${liyaLabel} Total</th><th>Purpose</th><th>Notes</th>${running?'<th>💰 Balance</th><th>Status</th><th>Action</th>':''}</tr></thead><tbody>${rows}</tbody></table>`
+}
+
+function printCustomerLedger(){
+  let d=load(),c=d.customers.find(x=>x.id===currentCustomerId);
+  if(!c)return toast('Customer not found');
+  let tx=d.transactions.filter(x=>x.customerId===c.id).sort(sortDate);
+  openLedgerPrint(c,tx,'customer');
+}
+
+function printSelectedAdminCustomer(){
+  if(!selectedAdminCustomerId)return toast('Pehle kisi customer card par click karein');
+  let d=load(),c=d.customers.find(x=>x.id===selectedAdminCustomerId);
+  if(!c)return toast('Customer not found');
+  let tx=d.transactions.filter(x=>x.customerId===c.id).sort(sortDate);
+  openLedgerPrint(c,tx,'admin');
+}
+
+function buildPrintRows(tx,opening,view){
+  let raw=Number(opening||0);
+  let diyaLabel=view==='customer'?'🔴 Debit (डेबिट)':'🔴 Debit (डेबिट)';
+  let liyaLabel=view==='customer'?'🟢 Credit (क्रेडिट)':'🟢 Credit (क्रेडिट)';
+  return tx.map((t,i)=>{
+    let before=splitBalance(raw);
+    let total=txTotal(t), diya=t.type==='diya'?total:0, liya=t.type==='liya'?total:0;
+    raw += diya-liya;
+    let after=splitBalance(raw);
+    let status=after.balance>0?'Balance बाकी':'Zero / Clear';
+    let note=t.base==='daily_wages'?`Daily Wages: ${t.days||0} day × ${rs(t.rate||0)}. `:'';
+    if(before.balance===0 && after.balance>0) note += 'Balance badna start. ';
+    if(before.balance>after.balance) note += `Balance kam: ${rs(before.balance-after.balance)}. `;
+    if(before.balance>0 && after.balance===0) note += 'Balance zero. ';
+    return {sn:i+1,date:t.date,time:t.time||'',type:t.type==='diya'?diyaLabel:liyaLabel,amount:Number(t.amount||0),charge:Number(t.charge||0),diya,liya,purpose:t.purpose||'',notes:t.notes||'',balance:after.balance,status,changeNote:note.trim()};
+  });
+}
+
+function openLedgerPrint(c,tx,view){
+  let t=totals(c.id);
+  let rows=buildPrintRows(tx,c.openingBalance,view);
+  let totalCharge=tx.reduce((s,x)=>s+Number(x.charge||0),0);
+  let firstDate=rows.length?rows[0].date:'-';
+  let lastDate=rows.length?rows[rows.length-1].date:'-';
+  let printDate=new Date().toLocaleDateString('en-IN');
+  let printTime=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  let perPage=12;
+  let pages=[];
+  for(let i=0;i<rows.length;i+=perPage)pages.push(rows.slice(i,i+perPage));
+  if(!pages.length)pages=[[]];
+  let pageCount=pages.length;
+  let diyaLabel=view==='customer'?'🔴 Debit (डेबिट)':'🔴 Debit (डेबिट)';
+  let liyaLabel=view==='customer'?'🟢 Credit (क्रेडिट)':'🟢 Credit (क्रेडिट)';
+  let balanceLabel='💰 Balance (बाकी बकाया)';
+  let style=`
+  <style>
+    @page{size:A4 portrait;margin:8mm}
+    *{box-sizing:border-box}
+    body{margin:0;background:#eef5ff;font-family:Arial,Helvetica,sans-serif;color:#111827}
+    .print-btn{position:fixed;top:10px;right:10px;z-index:99;border:0;background:#2563eb;color:#fff;border-radius:10px;padding:10px 16px;font-weight:800;cursor:pointer}
+    .print-page{width:194mm;min-height:281mm;margin:10px auto;background:#fff;padding:10mm 9mm 28mm;border:1px solid #cbd5e1;position:relative;page-break-after:always;overflow:hidden}
+    .print-page:last-child{page-break-after:auto}
+    .head{display:flex;gap:14px;align-items:center;border-bottom:3px solid #0f172a;padding-bottom:10px;margin-bottom:10px}
+    .head img{width:78px;height:78px;border-radius:50%;object-fit:cover;background:#dbeafe;border:2px solid #bfdbfe}
+    h1{font-size:24px;margin:0 0 5px;color:#0f172a}.cust-name{font-size:17px;font-weight:900}.muted{color:#475569;font-size:13px;font-weight:700}.print-info{margin-left:auto;text-align:right;font-size:12px;font-weight:800;color:#334155}
+    .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 10px}.box{border:1px solid #cbd5e1;border-radius:12px;padding:9px;background:#f8fbff;min-height:58px}.box span{display:block;font-size:11.5px;font-weight:900;color:#334155}.box b{display:block;font-size:18px;margin-top:4px;color:#0f172a}
+    table{border-collapse:collapse;width:100%;font-size:10.8px;table-layout:fixed}th,td{border:1px solid #cbd5e1;padding:5px 4px;text-align:left;vertical-align:middle;word-wrap:break-word}th{background:#0f172a;color:#fff;font-size:10px}td b{font-weight:900}.type{font-weight:900}.diya{color:#166534}.liya{color:#0369a1}
+    .page-summary{position:absolute;left:9mm;right:9mm;bottom:12mm;border-top:2px solid #0f172a;padding-top:6px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-size:10px;font-weight:900;background:#fff}.page-summary div{border:1px solid #cbd5e1;border-radius:8px;padding:6px;background:#f8fbff}.page-summary b{display:block;margin-top:2px;font-size:13px}
+    .footer-line{position:absolute;left:9mm;right:9mm;bottom:4mm;text-align:center;font-size:10px;font-weight:800;color:#475569}.footer-line .page-no{float:right;color:#111827}
+    .final-summary{margin-top:12px;border:3px double #0f172a;border-radius:14px;padding:12px;background:#f8fbff;page-break-inside:avoid}.final-summary h2{text-align:center;margin:0 0 10px;font-size:19px}.final-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.final-item{border:1px solid #cbd5e1;border-radius:10px;padding:8px;background:#fff;font-weight:900}.signatures{display:flex;justify-content:space-between;gap:40px;margin-top:34px;font-weight:900}.sign{width:45%;text-align:center;border-top:2px solid #0f172a;padding-top:8px}
+    @media print{body{background:#fff}.print-btn{display:none}.print-page{margin:0;border:0;width:auto;min-height:281mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+  </style>`;
+  function rowHtml(r){return `<tr><td style="width:5%">${r.sn}</td><td style="width:8%">${esc(r.date)}</td><td style="width:6%">${esc(r.time)}</td><td style="width:12%" class="type ${r.diya?'diya':'liya'}">${esc(r.type)}</td><td style="width:7%">${rs(r.amount)}</td><td style="width:6%">${rs(r.charge)}</td><td style="width:8%">${r.diya?rs(r.diya):'-'}</td><td style="width:8%">${r.liya?rs(r.liya):'-'}</td><td style="width:8%"><b>${rs(r.balance)}</b></td><td style="width:10%">${esc(r.status)}</td><td style="width:14%">${esc((r.notes? r.notes+' | ' : '') + r.changeNote)}</td></tr>`}
+  function pageSummary(){return `<div class="page-summary"><div>${diyaLabel}<b>${rs(t.diya)}</b></div><div>${liyaLabel}<b>${rs(t.liya)}</b></div><div>${balanceLabel}<b>${rs(t.balance)}</b></div><div>📑 Total Tx<b>${t.count}</b></div></div>`}
+  let pagesHtml=pages.map((chunk,pi)=>{
+    let isLast=pi===pages.length-1;
+    return `<div class="print-page"><div class="head">${c.photo?`<img src="${c.photo}">`:''}<div><h1>SaiTech Customer Ledger</h1><div class="cust-name">${esc(c.name)}</div><div class="muted">Mobile: ${esc(c.mobile)}</div><div class="muted">Address: ${esc(c.address||'')}</div></div><div class="print-info">Print Date: ${printDate}<br>Print Time: ${printTime}</div></div><div class="summary"><div class="box"><span>${diyaLabel}</span><b>${rs(t.diya)}</b></div><div class="box"><span>${liyaLabel}</span><b>${rs(t.liya)}</b></div><div class="box"><span>${balanceLabel}</span><b>${rs(t.balance)}</b></div><div class="box"><span>Total Charge</span><b>${rs(totalCharge)}</b></div></div><table><thead><tr><th>S.No</th><th>Date</th><th>Time</th><th>Type</th><th>Amount</th><th>Charge</th><th>${diyaLabel} Total</th><th>${liyaLabel} Total</th><th>Balance</th><th>Status</th><th>Notes / Change</th></tr></thead><tbody>${chunk.map(rowHtml).join('')||'<tr><td colspan="11" style="text-align:center;padding:18px">No transactions</td></tr>'}</tbody></table>${isLast?`<div class="final-summary"><h2>FINAL LEDGER SUMMARY</h2><div class="final-grid"><div class="final-item">${diyaLabel}<br>${rs(t.diya)}</div><div class="final-item">${liyaLabel}<br>${rs(t.liya)}</div><div class="final-item">💰 Total Charge<br>${rs(totalCharge)}</div><div class="final-item">${balanceLabel}<br>${rs(t.balance)}</div><div class="final-item">📑 Total 
+s<br>${t.count}</div><div class="final-item">Date Range<br>${firstDate} to ${lastDate}</div></div><div class="signatures"><div class="sign">Customer Signature</div><div class="sign">Admin Signature</div></div></div>`:''}${pageSummary()}<div class="footer-line">Generated by SaiTech  Management System <span class="page-no">Page ${pi+1} of ${pageCount}</span></div></div>`
+  }).join('');
+  let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${esc(c.name)} Ledger Print</title>${style}</head><body><button class="print-btn" onclick="window.print()">Print</button>${pagesHtml}</body></html>`;
+  let w=window.open('','_blank');w.document.open();w.document.write(html);w.document.close();w.focus();
+}
+function previewCustomerPhoto(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{photoData=r.result;document.getElementById('cPhotoPreview').src=photoData};r.readAsDataURL(f)}
+function saveCustomer(){let d=load(),eid=document.getElementById('editCustomerId').value,name=val('cName'),mobile=val('cMobile'),address=val('cAddress'),opening=Number(val('cOpening')||0);if(!name||!/^\d{10}$/.test(mobile))return toast('Name aur 10 digit mobile required');if(d.customers.some(c=>c.mobile===mobile&&c.id!==eid))return toast('Mobile already exists');if(eid){let c=d.customers.find(x=>x.id===eid);Object.assign(c,{name,mobile,address,openingBalance:opening,photo:photoData||c.photo})}else d.customers.push({id:id(),name,mobile,address,openingBalance:opening,photo:photoData});save(d);resetCustomerForm();renderAdmin();toast('Customer saved')}
+function quickAddForCustomer(cid,type){openTabById('addTransaction');set('txCustomer',cid);set('txType',type);set('txBase','normal');toggleDailyWages();set('txAmount','');set('txPurpose',type==='diya'?'Debit entry':'Credit payment');updateTxTypeUI();document.getElementById('txAmount')?.focus()}
+function editCustomer(cid){let d=load(),c=d.customers.find(x=>x.id===cid);openTabById('addCustomer');document.getElementById('customerFormTitle').textContent='Edit Customer';set('editCustomerId',c.id);set('cName',c.name);set('cMobile',c.mobile);set('cAddress',c.address);set('cOpening',c.openingBalance||0);photoData=c.photo||'';document.getElementById('cPhotoPreview').src=photoData}
+function deleteCustomer(cid){if(!confirm('Customer aur uski transactions delete karni hain?'))return;let d=load();d.customers=d.customers.filter(c=>c.id!==cid);d.transactions=d.transactions.filter(t=>t.customerId!==cid);save(d);selectedAdminCustomerId=null;renderAdmin();toast('Deleted')}
+function resetCustomerForm(){['editCustomerId','cName','cMobile','cAddress','cOpening','cPhoto'].forEach(x=>set(x,''));photoData='';document.getElementById('cPhotoPreview').removeAttribute('src');document.getElementById('customerFormTitle').textContent='Add New Customer'}
+function populateCustomerSelect(){let d=load(),s=document.getElementById('txCustomer');if(!s)return;s.innerHTML=d.customers.map(c=>`<option value="${c.id}">${esc(c.name)} - ${c.mobile}</option>`).join('')}
+function initDates(){set('txDate',today());set('txTime',nowTime());if(!val('reportMonth'))set('reportMonth',today().slice(0,7))}
+
+function addQuickAmount(n){set('txAmount', Number(val('txAmount')||0)+Number(n||0))}
+function clearAmount(){set('txAmount','')}
+function setWageRate(n){set('txRate',n);calcDailyWages()}
+function toggleDailyWages(){
+  let isWage=val('txBase')==='daily_wages';
+  document.getElementById('wageDaysBox')?.classList.toggle('hidden',!isWage);
+  document.getElementById('wageRateBox')?.classList.toggle('hidden',!isWage);
+  document.getElementById('normalAmountBox')?.classList.toggle('hidden',isWage);
+  if(isWage) calcDailyWages();
+}
+function calcDailyWages(){
+  let days=Number(val('txDays')||0), rate=Number(val('txRate')||0);
+  set('txAmount', days*rate);
+}
+function updateTxTypeUI(){
+  let type=val('txType');
+  let p=document.getElementById('txPurpose');
+  if(p && !p.value){p.placeholder=type==='diya'?'Purpose / Work / Daily wages given':'Payment received / Jama amount /';}
+}
+function getTxCustomer(){let d=load();return d.customers.find(c=>c.id===val('txCustomer'))}
+function createCustomerNotification(d,tx){
+  if(!d.notifications)d.notifications=[];
+  let c=d.customers.find(x=>x.id===tx.customerId); if(!c)return;
+  let typeLabel=tx.type==='diya'?'Debit (डेबिट)':'Credit (क्रेडिट)';
+  let total=txTotal(tx), bal=totalsAfter(d,tx.customerId);
+  let wage = tx.base==='daily_wages' ? ` | Daily Wages: ${tx.days||0} day × ₹${tx.rate||0}` : '';
+  let msg=`SaiTech Ledger Update: ${c.name}, ${typeLabel} ${rs(total)} on ${tx.date} ${tx.time||''}.${wage} Purpose: ${tx.purpose||'-'}. Balance: ${rs(bal.balance)}.`;
+  d.notifications.unshift({id:id(),customerId:tx.customerId,txId:tx.id,type:tx.type,message:msg,date:tx.date,time:tx.time||nowTime(),read:false});
+}
+function totalsAfter(data,customerId){
+  let tx=data.transactions.filter(t=>t.customerId===customerId);
+  let diya=tx.filter(t=>t.type==='diya').reduce((s,t)=>s+txTotal(t),0);
+  let liya=tx.filter(t=>t.type==='liya').reduce((s,t)=>s+txTotal(t),0);
+  let c=data.customers.find(x=>x.id===customerId);let raw=Number(c?.openingBalance||0)+diya-liya;
+  return splitBalance(raw);
+}
+function renderCustomerNotifications(){
+  let box=document.getElementById('customerNotifications'); if(!box)return;
+  let d=load(), arr=(d.notifications||[]).filter(n=>n.customerId===currentCustomerId).slice(0,20);
+  box.innerHTML=arr.length?arr.map(n=>`<div class="notice-box ${n.read?'':'notice-unread'}"><b>${n.type==='diya'?'🔴 Debit (डेबिट)':'🟢 Credit (क्रेडिट)'}</b><small>${esc(n.date)} ${esc(n.time||'')}</small><p>${esc(n.message)}</p></div>`).join(''):'<div class="empty">No notifications</div>';
+}
+function markCustomerNotificationsRead(){let d=load();(d.notifications||[]).forEach(n=>{if(n.customerId===currentCustomerId)n.read=true});save(d);renderCustomerNotifications();toast('Notifications read marked')}
+function sendWhatsAppNotificationFromForm(){
+  let c=getTxCustomer(); if(!c)return toast('Customer select karein');
+  let type=val('txType'), base=val('txBase'), amount=Number(val('txAmount')||0), charge=Number(val('txCharge')||0), total=amount+charge;
+  if(base==='daily_wages') calcDailyWages();
+  if(!total)return toast('Amount daliye');
+  let label=type==='diya'?'Debit (डेबिट) - ग्राहक को पैसे दिए':'Credit (क्रेडिट) - ग्राहक से पैसे लिए';
+  let wage=base==='daily_wages'?`%0ADaily Wages: ${val('txDays')||0} दिन × ₹${val('txRate')||0}`:'';
+  let msg=`SaiTech Ledger Update%0AName: ${encodeURIComponent(c.name)}%0AType: ${encodeURIComponent(label)}%0AAmount: ₹${amount}%0ACharge: ₹${charge}%0ATotal: ₹${total}${wage}%0APurpose: ${encodeURIComponent(val('txPurpose')||'-')}%0ADate: ${val('txDate')} ${val('txTime')||''}`;
+  window.open(`https://wa.me/91${c.mobile}?text=${msg}`,'_blank');
+}
+function saveTransaction(){let d=load(),customerId=val('txCustomer'),type=val('txType'),base=val('txBase')||'normal';if(base==='daily_wages')calcDailyWages();let amount=Number(val('txAmount')),date=val('txDate'),time=val('txTime'),purpose=val('txPurpose'),charge=Number(val('txCharge')||0),notes=val('txNotes'),days=Number(val('txDays')||0),rate=Number(val('txRate')||0);if(!customerId||!amount||!date)return toast('Customer, amount, date required');if(base==='daily_wages'&&(!days||!rate))return toast('Daily wages ke liye days aur rate required');let tx={id:id(),customerId,type,amount,date,time,purpose,charge,notes,base,days,rate};d.transactions.push(tx);createCustomerNotification(d,tx);save(d);resetTxForm();renderAdmin();toast('Transaction saved + customer notification added')}
+function resetTxForm(){set('txAmount','');set('txCharge','');set('txPurpose','');set('txNotes','');set('txDays','');set('txRate','');set('txBase','normal');set('txDate',today());set('txTime',nowTime());toggleDailyWages()}
+function deleteTx(tid){let d=load();d.transactions=d.transactions.filter(t=>t.id!==tid);save(d);renderAdmin();toast('Transaction deleted')}
+function renderMonthlyReport(){let d=load(),m=val('reportMonth')||today().slice(0,7);let rows=d.customers.map(c=>{let tx=d.transactions.filter(t=>t.customerId===c.id&&t.date.startsWith(m));let diya=tx.filter(t=>t.type==='diya').reduce((s,t)=>s+txTotal(t),0);let liya=tx.filter(t=>t.type==='liya').reduce((s,t)=>s+txTotal(t),0);let sp=splitBalance(diya-liya);return{c,diya,liya,balance:sp.balance}});document.getElementById('monthlyTable').innerHTML=`<table><thead><tr><th>Customer</th><th>Mobile</th><th>🔴 Debit (डेबिट)</th><th>🟢 Credit (क्रेडिट)</th><th>💰 Balance (बाकी बकाया)</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r.c.name)}</td><td>${r.c.mobile}</td><td>${rs(r.diya)}</td><td>${rs(r.liya)}</td><td><b>${rs(r.balance)}</b></td></tr>`).join('')}</tbody></table>`}
+function drawMonthlyChart(){let canvas=document.getElementById('monthlyCanvas');if(!canvas)return;let ctx=canvas.getContext('2d');let w=canvas.width=canvas.offsetWidth*2,h=canvas.height=300*2;ctx.clearRect(0,0,w,h);ctx.scale(2,2);let d=load(),m=val('reportMonth')||today().slice(0,7);let diya=0,liya=0;d.transactions.filter(t=>t.date.startsWith(m)).forEach(t=>{if(t.type==='diya')diya+=Number(t.amount||0)+Number(t.charge||0);else liya+=txTotal(t)});let sp=splitBalance(diya-liya),vals=[diya,liya,sp.balance],labels=['उधार दिए','उधार लिए','Balance'];let max=Math.max(...vals,1),x=60;ctx.font='14px Arial';ctx.fillText('Monthly Report '+m,20,25);vals.forEach((v,i)=>{let bh=(v/max)*190;ctx.fillRect(x+i*105,250-bh,70,bh);ctx.fillText(labels[i],x+i*105,270);ctx.fillText(rs(v),x+i*105,245-bh)});ctx.beginPath();ctx.moveTo(35,250);ctx.lineTo(430,250);ctx.stroke()}
+function renderFastPaying(){let d=load();let rows=d.customers.map(c=>{let tx=d.transactions.filter(t=>t.customerId===c.id).sort(sortDate);let delays=[],lastPay='',paid=0;tx.forEach((t,i)=>{if(t.type==='liya'){paid+=txTotal(t);lastPay=t.date;let prev=tx.slice(0,i).reverse().find(x=>x.type==='diya');if(prev)delays.push(daysBetween(prev.date,t.date))}});let avg=delays.length?delays.reduce((a,b)=>a+b,0)/delays.length:9999;return{c,avg,lastPay,paid}}).sort((a,b)=>a.avg-b.avg);document.getElementById('fastPayingTable').innerHTML=`<table><thead><tr><th>Rank</th><th>Customer</th><th>Mobile</th><th>Average Payment Delay</th><th>Last Payment Date</th><th>Total Paid Amount</th></tr></thead><tbody>${rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.c.name)}</td><td>${r.c.mobile}</td><td>${r.avg===9999?'No payment history':r.avg.toFixed(1)+' days'}</td><td>${r.lastPay||'-'}</td><td>${rs(r.paid)}</td></tr>`).join('')}</tbody></table>`}
+
+function populateMessageCustomerSelect(){let d=load(),s=document.getElementById('msgCustomer');if(!s)return;s.innerHTML=d.customers.map(c=>`<option value="${c.id}">${esc(c.name)} - ${esc(c.mobile)}</option>`).join('')}
+function initMessageCenter(){populateMessageCustomerSelect();if(!val('msgBody'))applyMessageTemplate();else buildMessagePreview()}
+function getMsgCustomer(){let d=load();return d.customers.find(c=>c.id===val('msgCustomer'))}
+function setMessageTemplate(type){set('msgType',type);applyMessageTemplate()}
+function applyMessageTemplate(){let type=val('msgType')||'balance';let c=getMsgCustomer();let name=c?c.name:'Customer';let t=c?totals(c.id):{balance:0,diya:0,liya:0};let purpose=val('msgPurpose')||'Ledger Update';let amount=val('msgAmount')?rs(val('msgAmount')):'';let body='';
+  if(type==='balance') body=`प्रिय ${name},\nआपका SaiTech Ledger balance ${rs(t.balance)} बाकी है।\nकृपया समय पर भुगतान करें।\n\nDear ${name}, your outstanding balance is ${rs(t.balance)}. Please clear it soon.\n\nThank you,\nSaiTech Management System`;
+  else if(type==='debit') body=`🔴 Debit Alert (डेबिट सूचना)\n\nप्रिय ${name},\nआपके ledger में ${amount||'₹0'} Debit entry add की गई है।\nPurpose: ${purpose}\nCurrent Balance: ${rs(t.balance)}\n: \n\nSaiTech Management System`;
+  else if(type==='credit') body=`🟢 Credit Alert (क्रेडिट सूचना)\n\nप्रिय ${name},\nआपके ledger में ${amount||'₹0'} Credit / payment entry add की गई है।\nPurpose: ${purpose}\nCurrent Balance: ${rs(t.balance)}\n: \n\nSaiTech Management System`;
+  else body='';
+  set('msgBody',body);buildMessagePreview();
+}
+function buildMessagePreview(){let c=getMsgCustomer();let t=c?totals(c.id):{balance:0,diya:0,liya:0};let body=val('msgBody')||'';let preview=`╔════════════════════╗\n   🔔 SAITECH NOTIFICATION\n╚════════════════════╝\n\nCustomer: ${c?c.name:'-'}\nMobile: ${c?c.mobile:'-'}\nDate: ${new Date().toLocaleDateString('en-IN')}\n\n${body}\n\n──────── Ledger Summary ────────\n🔴 Debit: ${rs(t.diya)}\n🟢 Credit: ${rs(t.liya)}\n💰 Balance: ${rs(t.balance)}\n───────────────────────────────`;
+  let el=document.getElementById('msgPreview');if(el)el.textContent=preview;return preview;
+}
+function sendDirectCustomerNotification(){let c=getMsgCustomer();if(!c)return toast('Customer select karein');let d=load();if(!d.notifications)d.notifications=[];let preview=buildMessagePreview();d.notifications.unshift({id:id(),customerId:c.id,txId:'manual',type:val('msgType')||'custom',message:preview,date:today(),time:nowTime(),read:false,manual:true});save(d);toast('Customer login me notification bhej diya')}
+function sendMessageWhatsApp(){let c=getMsgCustomer();if(!c)return toast('Customer select karein');let preview=buildMessagePreview();window.open(`https://wa.me/91${c.mobile}?text=${encodeURIComponent(preview)}`,'_blank')}
+function sendBothNotificationAndWhatsApp(){sendDirectCustomerNotification();sendMessageWhatsApp()}
+function clearMessageBox(){set('msgAmount','');set('msgPurpose','');set('msgBody','');buildMessagePreview()}
+
+function loadSettings(){let d=load();set('setCurrentUser',d.admin.username);set('setNewUser',d.admin.username)}
+function changeAdminSettings(){let d=load(),old=val('setOldPass'),np=val('setNewPass'),cp=val('setConfirmPass'),nu=val('setNewUser');if(old!==d.admin.password)return toast('Old password wrong');if(!nu)return toast('Username required');if(np!==cp)return toast('New password mismatch');if(np.length<4)return toast('Password minimum 4 characters');d.admin.username=nu;d.admin.password=np;save(d);toast('Admin updated')}
+function exportJSON(){let blob=new Blob([JSON.stringify(load(),null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='saitech-ledger-backup.json';a.click()}
+function importJSON(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let data=JSON.parse(r.result);if(!data.admin||!data.customers||!data.transactions)throw Error();save(data);renderAdmin();toast('Backup imported')}catch(_){toast('Invalid JSON backup')}};r.readAsText(f)}
+function daysBetween(a,b){return Math.max(0,Math.round((new Date(b)-new Date(a))/(1000*60*60*24)))}function sortDate(a,b){return (a.date+a.time).localeCompare(b.date+b.time)}function esc(s){return String(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}function val(id){return document.getElementById(id)?.value||''}function set(id,v){let e=document.getElementById(id);if(e)e.value=v}
+checkSession();initDates();toggleDailyWages();updateTxTypeUI();populateMessageCustomerSelect();
+</script>
+</body>
+</html>
